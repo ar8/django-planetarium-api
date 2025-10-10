@@ -22,6 +22,7 @@ from django.core.cache import cache
 class CustomTokenObtainPairView(TokenObtainPairView):
     """
     helper functions to get Bearer token to test security of the API
+    Example: http://localhost:8000/auth/token/
     """
     serializer_class = CustomTokenObtainPairSerializer
 
@@ -31,9 +32,10 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 # -----------------------------
 class PlanetPagination(LimitOffsetPagination, PageNumberPagination):
     """
-    /api/v1/planets/?page=2 => get page 2
-    /api/v1/planets/?page=3&page_size=5 => page 3, with 5 results per page
-    /api/v1/planets/?limit=5&offset=10 => skip 10, return 5
+    example:
+    planets/?page=2 => get page 2
+    planets/?page=3&page_size=5 => page 3, with 5 results per page
+    planets/?limit=5&offset=10 => skip 10, return 5
     """
     default_limit = 10
     page_size_query_param = 'page_size'
@@ -48,20 +50,21 @@ class PlanetPagination(LimitOffsetPagination, PageNumberPagination):
 class PlanetListAPIView(ListAPIView):
     """
     Get all planets, filter, search, order, paginate
-    /api/v1/planets/
-    /api/v1/planets/?name=Earth
-    /api/v1/planets/?climates=temperate
-    /api/v1/planets/?terrains=forest
-    /api/v1/planets/?population=1000
-    /api/v1/planets/?search=Earth
-    /api/v1/planets/?ordering=name
-    /api/v1/planets/?ordering=-population
-    /api/v1/planets/?page=2
-    /api/v1/planets/?page=3&page_size=5
-    /api/v1/planets/?limit=5&offset=10
-    /api/v1/planets/?climates__name=temperate
-    /api/v1/planets/?terrains__name=forest
-    /api/v1/planets/?population__gte=1000&population__lte=5000
+    example:
+    planets/
+    planets/?name=Earth
+    planets/?climates=temperate
+    planets/?terrains=forest
+    planets/?population=1000
+    planets/?search=Earth
+    planets/?ordering=name
+    planets/?ordering=-population
+    planets/?page=2
+    planets/?page=3&page_size=5
+    planets/?limit=5&offset=10
+    planets/?climates__name=temperate
+    planets/?terrains__name=forest
+    planets/?population__gte=1000&population__lte=5000
     """
     queryset = Planet.objects.all()
     serializer_class = PlanetSerializer
@@ -90,8 +93,9 @@ class PlanetListAPIView(ListAPIView):
 class PlanetDetailAPIView(RetrieveAPIView):
     """
     Get a planet by name
-    /api/v1/planets/name/Earth/
-    /api/v1/planets/name/Mars/
+    example:
+    planets/name/Earth/
+    planets/name/Mars/
     """
     queryset = Planet.objects.all()
     serializer_class = PlanetSerializer

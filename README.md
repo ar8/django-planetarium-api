@@ -29,6 +29,8 @@ For open source projects, say how it is licensed.
 * create migrations based on models
     * `python manage.py makemigrations`
     * run migrations: `python manage.py migrate`
+* create seeds for  terrains & climates
+    * `python manage.py seed_data`
 * run test
     * `./manage.py test`
 

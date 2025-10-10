@@ -9,8 +9,16 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class PlanetSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=100)
     population = serializers.IntegerField()
-    terrains = serializers.PrimaryKeyRelatedField(many=True, queryset=Terrain.objects.all())
-    climates = serializers.PrimaryKeyRelatedField(many=True, queryset=Climate.objects.all())
+    terrains = serializers.SlugRelatedField(
+        many=True,
+        slug_field='name',
+        queryset=Terrain.objects.all()
+    )
+    climates = serializers.SlugRelatedField(
+        many=True,
+        slug_field='name',
+        queryset=Climate.objects.all()
+    )
     id = serializers.ReadOnlyField()
 
     class Meta:
