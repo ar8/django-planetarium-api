@@ -35,4 +35,9 @@ For open source projects, say how it is licensed.
 More helper commands
 * install pip-tool: `pip install pip-tools`
 * get dependencies: `pip freeze`
+* project user flake8 for lint configurations are in `setup.cfg`
+    * run lint: `flake8`
+
+
+* planet list for testing: https://dragonball.fandom.com/wiki/List_of_Planets
 

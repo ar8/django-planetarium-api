@@ -1,3 +1,12 @@
 django
 pip-tools
 djangorestframework
+flake8
+requests
+pytest
+pytest-django
+pytest-cov
+django-filter
+djangorestframework-simplejwt
+
+
