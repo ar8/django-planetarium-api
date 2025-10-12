@@ -52,6 +52,6 @@ More helper commands
     * Run endpoint get_bearer_token to get the value anc copy value of "access" to collection variable BEARER_TOKEN
 
 ## Documentation
-- Docs: http://127.0.0.1:8000/api/v1/planets/api/docs/
+- Docs: http://127.0.0.1:8000/api/docs/
 
 
