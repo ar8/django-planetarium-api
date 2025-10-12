@@ -40,6 +40,47 @@
 			"response": []
 		},
 		{
+			"name": "get_graphql_planets_service",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/planets/service/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"planets",
+						"service",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "get_planets",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -60,7 +101,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/planets/",
+					"raw": "http://127.0.0.1:8000/api/v1/planets?ordering=-population",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -70,8 +111,15 @@
 					],
 					"port": "8000",
 					"path": [
-						"planets",
-						""
+						"api",
+						"v1",
+						"planets"
+					],
+					"query": [
+						{
+							"key": "ordering",
+							"value": "-population"
+						}
 					]
 				}
 			},
@@ -84,14 +132,7 @@
 			},
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{BEARER_TOKEN}}",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "GET",
 				"header": [],
@@ -105,15 +146,19 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/planets/detail/Namek/",
+					"raw": "http://127.0.0.1:8000/api/v1/planets/Namek/",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"planets",
-						"detail",
 						"Namek",
 						""
 					]
@@ -125,20 +170,13 @@
 			"name": "create_planets",
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{BEARER_TOKEN}}",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"Namek_3\",\n  \"population\": \"100\",\n  \"terrains\": [\"Grasslands\", \"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Mild\", \"Humid\"]\n}",
+					"raw": "{\n  \"name\": \"Namek\",\n  \"population\": \"100\",\n  \"terrains\": [\"Grasslands\", \"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Mild\", \"Humid\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -146,13 +184,18 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/planets/create/",
+					"raw": "http://127.0.0.1:8000/api/v1/planets/create/",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"planets",
 						"create",
 						""
@@ -165,20 +208,13 @@
 			"name": "update_planets",
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{BEARER_TOKEN}}",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"Namek\",\n  \"population\": \"500\",\n  \"terrains\": [\"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Mild\", \"Humid\", \"Iced\"]\n}",
+					"raw": "{\n  \"name\": \"Namek_3\",\n  \"population\": \"500\",\n  \"terrains\": [\"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Mild\", \"Humid\", \"Iced\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -186,16 +222,21 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/planets/update/Namek/",
+					"raw": "http://127.0.0.1:8000/api/v1/planets/Namek_3/update/",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"planets",
+						"Namek_3",
 						"update",
-						"Namek",
 						""
 					]
 				}
@@ -220,16 +261,21 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/planets/delete/Namek_3/",
+					"raw": "http://127.0.0.1:8000/api/v1/planets/Namek_3/delete/",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8000",
 					"path": [
+						"api",
+						"v1",
 						"planets",
-						"delete",
 						"Namek_3",
+						"delete",
 						""
 					]
 				}

@@ -42,21 +42,29 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
+    # api models
     'planets',
+    # documentation
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
 
 ]
 # TODO: commented for testing
 REST_FRAMEWORK = {
+    # authentication
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',  # default globally
     ),
+    # documentation
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
 }
 
-# for testing purposes, set to False to allow public access
-PLANETS_AUTH_REQUIRED = False
+# for testing purposes: set to False to allow public access
+PLANETS_AUTH_REQUIRED = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

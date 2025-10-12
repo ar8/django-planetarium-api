@@ -7,11 +7,6 @@ from .services import fetch_planets_service
 from .models import Planet, Terrain, Climate
 from django.db import transaction
 
-# UI views
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import PlanetForm
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-
 
 class PlanetServiceView(View):
     def get(self, request):

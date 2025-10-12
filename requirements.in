@@ -8,5 +8,7 @@ pytest-django
 pytest-cov
 django-filter
 djangorestframework-simplejwt
+drf-spectacular 
+drf-spectacular-sidecar
 
 
