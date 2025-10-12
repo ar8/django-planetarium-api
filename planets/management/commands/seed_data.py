@@ -33,7 +33,7 @@ class Command(BaseCommand):
         )
         p1.terrains.set([terrain1, terrain2])
         p1.climates.set([climate1, climate3])
-    
+
         p2 = Planet.objects.create(
             name='Mars',
             population=0

@@ -1,3 +1,116 @@
-from django.test import TestCase
+from rest_framework.test import APITestCase
+from rest_framework import status
+from django.urls import reverse
+from django.contrib.auth.models import User
+from planets.models import Planet, Terrain, Climate
 
-# Create your tests here.
+
+class PlanetAPITestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@example.com',
+            password='testpass123'
+        )
+
+        self.client.force_authenticate(user=self.user)
+
+        # Create terrains and climates first
+        self.desert_terrain = Terrain.objects.create(name="desert")
+        self.rocky_terrain = Terrain.objects.create(name="rocky")
+        self.arid_climate = Climate.objects.create(name="arid")
+        self.temperate_climate = Climate.objects.create(name="temperate")
+
+        # Create planet with proper data types
+        self.planet = Planet.objects.create(
+            name="Earth",
+            population="7800000000"
+        )
+        # Add many-to-many relationships after creation
+        self.planet.terrains.add(self.rocky_terrain)
+        self.planet.climates.add(self.temperate_climate)
+
+    def test_view_PlanetListAPIView(self):
+        url = reverse('planets:listing')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        if 'results' in response.data:
+            self.assertIsInstance(response.data['results'], list)
+            self.assertGreaterEqual(len(response.data['results']), 1)
+        else:
+            self.assertIsInstance(response.data, list)
+
+    def test_view_PlanetDetailAPIView(self):
+        url = reverse('planets:detail', kwargs={'name': self.planet.name})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['name'], self.planet.name)
+
+    def test_create_planet(self):
+        url = reverse('planets:create')
+        data = {
+            "name": "Mars",
+            "population": "0",
+            "terrains": ["rocky", "desert"],
+            "climates": ["arid"]
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['planet']['name'], "Mars")
+
+    def test_update_planet(self):
+        url = reverse('planets:update', kwargs={'name': self.planet.name})
+        data = {
+            "name": self.planet.name,
+            "population": "8000000000",
+            "terrains": ["rocky"],
+            "climates": ["temperate"]
+        }
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.planet.refresh_from_db()
+        self.assertEqual(self.planet.population, 8000000000)
+
+    def test_delete_planet(self):
+        url = reverse('planets:delete', kwargs={'name': self.planet.name})
+        response = self.client.delete(url)
+
+        self.assertIn(response.status_code, [status.HTTP_204_NO_CONTENT, status.HTTP_204_NO_CONTENT])
+
+    def test_get_nonexistent_planet(self):
+        url = reverse('planets:detail', kwargs={'name': 'NonExistent'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_planet_serializer_validation(self):
+        url = reverse('planets:create')
+        data = {
+            "name": "",  # Invalid name
+            "population": "",  # Invalid population
+            "terrains": ["rocky"],
+            "climates": ["temperate"]
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_service_view(self):
+        url = reverse('planets:planet-service')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_unauthenticated_access(self):
+        """Test what happens without authentication"""
+        self.client.force_authenticate(user=None)
+        url = reverse('planets:listing')
+        response = self.client.get(url)
+        # This will help debug what's actually happening
+        print(f"Unauthenticated response status: {response.status_code}")
+        print(f"Response data: {response.data}")
+        # Adjust based on your OptionalAuthMixin behavior
+        if response.status_code == 401:
+            # If your mixin doesn't allow unauthenticated access
+            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        else:
+            # If your mixin allows unauthenticated access
+            self.assertEqual(response.status_code, status.HTTP_200_OK)

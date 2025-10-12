@@ -31,8 +31,8 @@ For open source projects, say how it is licensed.
     * run migrations: `python manage.py migrate`
 * create seeds for  terrains & climates
     * `python manage.py seed_data`
-* run test
-    * `./manage.py test`
+* tox is used run test
+    * `tox`
 
 More helper commands
 * install pip-tool: `pip install pip-tools`
@@ -50,6 +50,13 @@ More helper commands
     * In settings.py set PLANETS_AUTH_REQUIRED = True
     * Add authorization => Auth Type: Bearer Token, Token: {{BEARER_TOKEN}}
     * Run endpoint get_bearer_token to get the value anc copy value of "access" to collection variable BEARER_TOKEN
+* Rules: 
+    * You need to add a `Terrain` to the database before use it
+        * Available values are: Rocky ,Ocean ,Desert ,Grasslands ,Mountains ,Plains ,Lakes ,Islands
+        * Add one in: http://127.0.0.1:8000/admin/planets/terrain/
+    * You need to add a `Climate` to the database before use it
+        * Available values are: Tropical ,Arid ,Temperate ,Mild ,Humid
+        * Add one in:  http://127.0.0.1:8000/admin/planets/climate/
 
 ## Documentation
 - Docs: http://127.0.0.1:8000/api/docs/

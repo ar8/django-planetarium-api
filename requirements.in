@@ -10,5 +10,8 @@ django-filter
 djangorestframework-simplejwt
 drf-spectacular 
 drf-spectacular-sidecar
+pytest
+tox
+pytest-cov
 
 
