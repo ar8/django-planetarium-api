@@ -4,7 +4,7 @@ from . import models
 
 @admin.register(models.Planet)
 class PlanetAdmin(admin.ModelAdmin):
-    list_display = ('name', 'population', 'get_terrains', 'get_climates', 'created_at', 'updated_at')
+    list_display = ('id', 'name', 'population', 'get_terrains', 'get_climates', 'created_at', 'updated_at')
     search_fields = ('name', 'terrains__name', 'climates__name')
     list_filter = ('climates__name', 'terrains__name', 'created_at', 'updated_at')
     ordering = ('name',)

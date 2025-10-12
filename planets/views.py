@@ -1,11 +1,16 @@
 from django.shortcuts import render
 
-# Create your views here.
+# service view
 from django.http import JsonResponse
 from django.views import View
 from .services import fetch_planets_service
-from .models import Planet
+from .models import Planet, Terrain, Climate
 from django.db import transaction
+
+# UI views
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import PlanetForm
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 
 class PlanetServiceView(View):
@@ -19,12 +24,22 @@ class PlanetServiceView(View):
                     name=planet['name'],
                     defaults={'population': planet['population']}
                 )
-                if planet['terrains']:
-                    planet_obj.terrains.set(planet['terrains'])
-                if planet['climates']:
-                    planet_obj.climates.set(planet['climates'])
+                if planet.get('terrains'):
+                    terrain_objects = []
+                    for terrain_name in planet['terrains']:
 
-        # Fetch all planet objects from the database
+                        terrain, _ = Terrain.objects.get_or_create(name=terrain_name)
+                        terrain_objects.append(terrain)
+                    planet_obj.terrains.set(terrain_objects)
+                if planet.get('climates'):
+                    climate_objects = []
+                    for climate_name in planet['climates']:
+                        # important: to avoid duplicates, get or create climate
+                        climate, _ = Climate.objects.get_or_create(name=climate_name)
+                        climate_objects.append(climate)
+                    planet_obj.climates.set(climate_objects)
+
+        # Fetch all planet objects from the database, to double check adding new ones
         data = Planet.objects.all().values()
 
         return JsonResponse({
