@@ -27,9 +27,9 @@ class Climate(models.Model):
 class Planet(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100, unique=True)
-    population = models.BigIntegerField()
-    terrains = models.ManyToManyField(Terrain, related_name='planets')
-    climates = models.ManyToManyField(Climate, related_name='planets')
+    population = models.BigIntegerField(null=True, blank=True)
+    terrains = models.ManyToManyField(Terrain, related_name='planets', blank=True)
+    climates = models.ManyToManyField(Climate, related_name='planets', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

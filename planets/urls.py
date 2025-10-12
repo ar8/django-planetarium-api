@@ -1,9 +1,11 @@
 from django.urls import path
+from planets.views import PlanetServiceView
 from planets.api_views import PlanetListAPIView, PlanetDetailAPIView, PlanetCreateAPIView, PlanetUpdateAPIView, PlanetDeleteAPIView
 
 app_name = 'planets'
 
 urlpatterns = [
+    path('service/', PlanetServiceView.as_view(), name='planet-service'),
 
     # Planet API with clear structure
     path('', PlanetListAPIView.as_view(), name='listing'),

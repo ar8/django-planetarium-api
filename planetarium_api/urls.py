@@ -17,11 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from planets.api_views import CustomTokenObtainPairView
-from planets.views import PlanetServiceView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('service/', PlanetServiceView.as_view(), name='planet-service'),
     path('planets/', include('planets.urls')),
 ]

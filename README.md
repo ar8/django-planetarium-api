@@ -43,3 +43,12 @@ More helper commands
 
 * planet list for testing: https://dragonball.fandom.com/wiki/List_of_Planets
 
+## Testing Notes
+* Postman collection is in /Planetarium.postman_collection.json
+* For testing purpose I created a variable in settings.py > PLANETS_AUTH_REQUIRED = False to avoid the tedious process of get the bearer token and set it up
+* For testing with security you need to:
+    * In settings.py set PLANETS_AUTH_REQUIRED = True
+    * Add authorization => Auth Type: Bearer Token, Token: {{BEARER_TOKEN}}
+    * Run endpoint get_bearer_token to get the value anc copy value of "access" to collection variable BEARER_TOKEN
+
+

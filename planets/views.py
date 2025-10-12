@@ -5,23 +5,25 @@ from django.http import JsonResponse
 from django.views import View
 from .services import fetch_planets_service
 from .models import Planet
+from django.db import transaction
 
 
 class PlanetServiceView(View):
     def get(self, request):
-        planets = fetch_planets_service()
-        planet_list = []
+        planets_data = fetch_planets_service()
 
-        for planet in planets:
-            planet_object = Planet(
-                name=planet['name'],
-                population=planet['population'],
-                terrains=planet['terrains'],
-                climates=planet['climates']
-            )
-            planet_list.append(planet_object)
+        for planet in planets_data:
+            # Use transaction to avoid partial saves
+            with transaction.atomic():
+                planet_obj, created = Planet.objects.get_or_create(
+                    name=planet['name'],
+                    defaults={'population': planet['population']}
+                )
+                if planet['terrains']:
+                    planet_obj.terrains.set(planet['terrains'])
+                if planet['climates']:
+                    planet_obj.climates.set(planet['climates'])
 
-        Planet.objects.bulk_create(planet_list, ignore_conflicts=True, batch_size=10)
         # Fetch all planet objects from the database
         data = Planet.objects.all().values()
 

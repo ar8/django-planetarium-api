@@ -2,7 +2,7 @@ import requests
 
 
 def fetch_planets_service():
-    url = "https://swapi-graphql.netlify.app/.netlify/functions/index"
+    url = "https://swapi-graphql.netlify.app/graphql"
     query = """
     query {
       allPlanets {
@@ -15,7 +15,12 @@ def fetch_planets_service():
       }
     }
     """
-    response = requests.post(url, json={'query': query})
+    response = requests.post(
+            url,
+            json={'query': query},
+            headers={'Content-Type': 'application/json'},
+            timeout=30
+        )
     data = response.json()
 
     # Extract the planet list
