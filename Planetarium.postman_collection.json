@@ -87,7 +87,14 @@
 			},
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "GET",
 				"header": [],
@@ -101,7 +108,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/planets?ordering=-population",
+					"raw": "http://127.0.0.1:8000/api/v1/planets?search=Namek_6",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -117,8 +124,8 @@
 					],
 					"query": [
 						{
-							"key": "ordering",
-							"value": "-population"
+							"key": "search",
+							"value": "Namek_6"
 						}
 					]
 				}

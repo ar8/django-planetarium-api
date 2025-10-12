@@ -20,9 +20,7 @@ For open source projects, say how it is licensed.
 # local setup
 * create virtual venv: `virtualenv -p /usr/local/bin/python3.12 venv`
 * activate: `source venv/bin/activate`
-* install dependencies: `pip install -r requirements.frozen`
-* run server: `python manage.py runserver`
-    * admin UI: http://127.0.0.1:8000/admin/ 
+* install dependencies: `pip install -r requirements.frozen` 
 * run init migration: `python manage.py migrate`
 * create super user: `python manage.py createsuperuser`
 *    super user for this assessment: admin:admin
@@ -31,6 +29,8 @@ For open source projects, say how it is licensed.
     * run migrations: `python manage.py migrate`
 * create seeds for  terrains & climates
     * `python manage.py seed_data`
+* run server: `python manage.py runserver`
+    * admin UI: http://127.0.0.1:8000/admin/
 * tox is used run test
     * `tox`
 
