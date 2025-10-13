@@ -18,28 +18,30 @@ planetarium api is an assessment of Django CRUD Api
 For open source projects, say how it is licensed.
 
 # local setup
+* python version used: Python 3.12.11
 * create virtual venv: `virtualenv -p /usr/local/bin/python3.12 venv`
 * activate: `source venv/bin/activate`
 * install dependencies: `pip install -r requirements.frozen` 
 * run init migration: `python manage.py migrate`
+* create seeds for terrains & climates
+    * `python manage.py seed_data`
+* create super user: `python manage.py createsuperuser`
+    * super user for this assessment: admin:admin
+* run server: `python manage.py runserver`
+    * admin UI: http://127.0.0.1:8000/admin/
+* run test (test are implemented with tox)
+    * `tox`
+
+Helper commands dev(only)
+* install pip-tool: `pip install pip-tools`
+* get dependencies: `pip freeze`
+* project user flake8 for lint configurations are in `setup.cfg`
+    * run lint: `flake8`
 * create super user: `python manage.py createsuperuser`
 *    super user for this assessment: admin:admin
 * create migrations based on models
     * `python manage.py makemigrations`
     * run migrations: `python manage.py migrate`
-* create seeds for  terrains & climates
-    * `python manage.py seed_data`
-* run server: `python manage.py runserver`
-    * admin UI: http://127.0.0.1:8000/admin/
-* tox is used run test
-    * `tox`
-
-More helper commands
-* install pip-tool: `pip install pip-tools`
-* get dependencies: `pip freeze`
-* project user flake8 for lint configurations are in `setup.cfg`
-    * run lint: `flake8`
-
 
 * planet list for testing: https://dragonball.fandom.com/wiki/List_of_Planets
 
