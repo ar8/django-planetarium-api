@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from planets.api_views import CustomTokenObtainPairView
+from planets.views import PlanetServiceView
 
 # API documentation
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
@@ -24,7 +25,9 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, Sp
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/v1/planets/', include('planets.urls')),
+    # Service endpoint
+    path('planets-service/', PlanetServiceView.as_view(), name='planets-service'),
+    path('api/v1/', include('planets.urls')),
 
     # API documentation endpoints
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

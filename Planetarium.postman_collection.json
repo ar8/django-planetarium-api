@@ -60,20 +60,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/planets/service/",
+					"raw": "http://localhost:8000/planets-service/",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"localhost"
 					],
 					"port": "8000",
 					"path": [
-						"api",
-						"v1",
-						"planets",
-						"service",
+						"planets-service",
 						""
 					]
 				}
@@ -87,14 +81,7 @@
 			},
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{BEARER_TOKEN}}",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "GET",
 				"header": [],
@@ -108,7 +95,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/planets?search=Namek_6",
+					"raw": "http://127.0.0.1:8000/api/v1/planets",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -121,12 +108,6 @@
 						"api",
 						"v1",
 						"planets"
-					],
-					"query": [
-						{
-							"key": "search",
-							"value": "Namek_6"
-						}
 					]
 				}
 			},
@@ -146,6 +127,81 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"name\": \"Namek\",\n  \"population\": \"400\",\n  \"terrains\": [\"Grasslands\", \"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Mild\", \"Humid\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/planets/Earth/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"planets",
+						"Earth",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_planets",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Namek\",\n  \"population\": \"100\",\n  \"terrains\": [\"Grasslands\", \"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Humid\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/planets/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"planets",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update_planets",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Namek\",\n  \"population\": \"500\",\n  \"terrains\": [\"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Mild\", \"Humid\" ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -174,16 +230,16 @@
 			"response": []
 		},
 		{
-			"name": "create_planets",
+			"name": "update_planets_partial",
 			"request": {
 				"auth": {
 					"type": "noauth"
 				},
-				"method": "POST",
+				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"Namek\",\n  \"population\": \"100\",\n  \"terrains\": [\"Grasslands\", \"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Mild\", \"Humid\"]\n}",
+					"raw": "{\n  \"name\": \"Namek\",\n  \"population\": \"1000\",\n  \"terrains\": [\"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Mild\", \"Humid\" ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -191,7 +247,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/planets/create/",
+					"raw": "http://127.0.0.1:8000/api/v1/planets/Namek/",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -204,46 +260,7 @@
 						"api",
 						"v1",
 						"planets",
-						"create",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "update_planets",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"name\": \"Namek_3\",\n  \"population\": \"500\",\n  \"terrains\": [\"Mountains\", \"Plains\", \"Lakes\", \"Islands\"],\n  \"climates\": [\"Mild\", \"Humid\", \"Iced\"]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/planets/Namek_3/update/",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"v1",
-						"planets",
-						"Namek_3",
-						"update",
+						"Namek",
 						""
 					]
 				}
@@ -268,7 +285,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/api/v1/planets/Namek_3/delete/",
+					"raw": "http://127.0.0.1:8000/api/v1/planets/Namek/",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -281,8 +298,7 @@
 						"api",
 						"v1",
 						"planets",
-						"Namek_3",
-						"delete",
+						"Namek",
 						""
 					]
 				}

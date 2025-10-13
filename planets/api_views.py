@@ -1,38 +1,26 @@
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
-from rest_framework.filters import OrderingFilter
-from .models import Planet
-from .serializers import PlanetSerializer
-from django.http import Http404
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import Http404
+# filtering and searching
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 # pagination
 from rest_framework.pagination import PageNumberPagination
-# token authentication and security
-from .serializers import CustomTokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
-# for testing to avoid authentication
+# models and serializers
+from .models import Planet
+from .serializers import PlanetSerializer, CustomTokenObtainPairSerializer
 from .mixins import OptionalAuthMixin
+from rest_framework_simplejwt.views import TokenObtainPairView
 # cache
 from django.core.cache import cache
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
-    """
-    helper functions to get Bearer token to test security of the API
-    Example: http://localhost:8000/auth/token/
-    """
     serializer_class = CustomTokenObtainPairSerializer
 
 
 class PlanetPagination(PageNumberPagination):
-    """
-    example:
-    api/v1/planets/?page=2 => get page 2
-    api/v1/planets/?page=3&page_size=5 => page 3, with 5 results per page
-    api/v1/planets/?limit=5&offset=10 => skip 10, return 5
-    """
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 20
@@ -49,10 +37,14 @@ class PlanetPagination(PageNumberPagination):
         })
 
 
-class PlanetListAPIView(OptionalAuthMixin, ListAPIView):
+class PlanetViewSet(OptionalAuthMixin, ModelViewSet):
     """
+    Handles list, retrieve, create, update, and delete for planets.
+
     Get all planets, filter, search, order, paginate
-    example:
+    GET: /api/v1/planets/ =>  List all planets
+    GET: /api/v1/planets/<name>/ => Retrieve a single planet by name.
+    Filtering, searching, ordering, and pagination are supported, Examples:
     api/v1/planets/
     api/v1/planets/?name=Earth
     api/v1/planets/?climates=temperate
@@ -70,8 +62,10 @@ class PlanetListAPIView(OptionalAuthMixin, ListAPIView):
     """
     queryset = Planet.objects.all()
     serializer_class = PlanetSerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    lookup_field = 'name'
     pagination_class = PlanetPagination
+
+    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filterset_fields = {
         'name': ['icontains', 'exact'],
         'population': ['exact', 'gte', 'lte'],
@@ -79,28 +73,10 @@ class PlanetListAPIView(OptionalAuthMixin, ListAPIView):
         'updated_at': ['exact', 'gte', 'lte'],
         'climates__name': ['exact', 'icontains'],
         'terrains__name': ['exact', 'icontains'],
-
     }
     search_fields = ('name', 'climates__name', 'terrains__name', 'population', 'created_at', 'updated_at')
     ordering_fields = ('name', 'created_at', 'updated_at')
-    ordering = ('id',)  # default ordering
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset
-
-
-class PlanetDetailAPIView(OptionalAuthMixin, RetrieveAPIView):
-    """
-    Get a planet by name
-    example:
-    api/v1/planets/name/Earth/
-    api/v1/planets/name/Mars/
-    """
-    queryset = Planet.objects.all()
-    serializer_class = PlanetSerializer
-    # lookup by name instead of id
-    lookup_field = 'name'
+    ordering = ('id',)
 
     def get_object(self):
         try:
@@ -108,15 +84,10 @@ class PlanetDetailAPIView(OptionalAuthMixin, RetrieveAPIView):
         except Http404:
             raise Http404(f"Planet '{self.kwargs['name']}' not found")
 
-
-class PlanetCreateAPIView(OptionalAuthMixin, CreateAPIView):
     """
     Create a new planet
-    /api/v1/planets/create/
+    POST:   /api/v1/planets/
     """
-    queryset = Planet.objects.all()
-    serializer_class = PlanetSerializer
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -130,49 +101,32 @@ class PlanetCreateAPIView(OptionalAuthMixin, CreateAPIView):
 
         return Response(
             {"message": f"Planet '{planet_name}' was created successfully.", "planet": serializer.data},
-            status=status.HTTP_201_CREATED)
+            status=status.HTTP_201_CREATED
+        )
 
-
-class PlanetUpdateAPIView(OptionalAuthMixin, RetrieveUpdateAPIView):
     """
-    Update a planet by name
-    /api/v1/planets/update/Earth/
-    /api/v1/planets/update/Mars/
+    Update an existing planet
+    PUT:    /api/v1/planets/<name>/	    full update.
+    PATCH:	/api/v1/planets/<name>/	    Partial update.
     """
-    queryset = Planet.objects.all()
-    serializer_class = PlanetSerializer
-    lookup_field = 'name'
-
-    def get_object(self):
-        try:
-            return super().get_object()
-        except Http404:
-            raise Http404(f"Planet '{self.kwargs['name']}' not found")
-
-    def perform_update(self, serializer):
-        planet = self.get_object()
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
         serializer.save()
-        cache_key = f'planet_data_{planet.name}'
+        cache_key = f'planet_data_{instance.name}'
         cache.set(cache_key, serializer.data, timeout=60 * 15)
+        return Response(serializer.data)
 
-
-class PlanetDeleteAPIView(OptionalAuthMixin, DestroyAPIView):
     """
     Delete a planet by name
-    /api/v1/planets/delete/Earth/
-    /api/v1/planets/delete/Mars/
+    DELETE: /api/v1/planets/<name>/
     """
-    queryset = Planet.objects.all()
-    serializer_class = PlanetSerializer
-    lookup_field = 'name'
-
-    def get_object(self):
-        """Return planet or raise custom 404 message"""
-        try:
-            return super().get_object()
-        except Http404:
-            raise Http404(f"Planet '{self.kwargs['name']}' not found")
-
-    def perform_destroy(self, instance):
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
         cache.delete(f'planet_data_{instance.name}')
         instance.delete()
+        return Response(
+            {"message": f"Planet '{instance.name}' was deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT
+        )

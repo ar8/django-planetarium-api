@@ -51,10 +51,7 @@ INSTALLED_APPS = [
 ]
 # TODO: commented for testing
 REST_FRAMEWORK = {
-    # authentication
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    # authentication, for production, uncomment
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',  # default globally
     ),
@@ -64,7 +61,7 @@ REST_FRAMEWORK = {
 }
 
 # for testing purposes: set to False to allow public access
-PLANETS_AUTH_REQUIRED = True
+PLANETS_AUTH_REQUIRED = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
