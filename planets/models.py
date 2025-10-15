@@ -1,5 +1,13 @@
 from django.db import models
 
+"""
+Problem:
+Goodreads is a social media platform for books.
+Users use it to keep track of their favorite books and
+network with friends to discover new books.
+Given a user, could you find all the books in their social network?
+"""
+
 
 # Create your models here.
 class Terrain(models.Model):

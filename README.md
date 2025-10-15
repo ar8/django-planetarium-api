@@ -25,6 +25,7 @@ For open source projects, say how it is licensed.
 * run init migration: `python manage.py migrate`
 * create seeds for terrains & climates
     * `python manage.py seed_data`
+    * `python manage.py seed_data_goodreads`
 * create super user: `python manage.py createsuperuser`
     * super user for this assessment: admin:admin
 * run server: `python manage.py runserver`

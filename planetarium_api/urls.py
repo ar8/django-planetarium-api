@@ -28,6 +28,7 @@ urlpatterns = [
     # Service endpoint
     path('planets-service/', PlanetServiceView.as_view(), name='planets-service'),
     path('api/v1/', include('planets.urls')),
+    path('api/v1/', include('goodreads.urls')),
 
     # API documentation endpoints
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

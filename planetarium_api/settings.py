@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
     # api models
     'planets',
+    'goodreads',
     # documentation
     'drf_spectacular',
     'drf_spectacular_sidecar',
