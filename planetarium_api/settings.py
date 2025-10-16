@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
+from dotenv import load_dotenv
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,7 +53,7 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
 
 ]
-# TODO: commented for testing
+
 REST_FRAMEWORK = {
     # authentication, for production, uncomment
     'DEFAULT_PERMISSION_CLASSES': (
@@ -60,9 +63,6 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
 }
-
-# for testing purposes: set to False to allow public access
-PLANETS_AUTH_REQUIRED = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -145,3 +145,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# for testing purposes: set to False to allow public access
+# Load environment variables from .env file
+load_dotenv()
+DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
+API_AUTH_REQUIRED = DJANGO_ENV.lower() == "production"
