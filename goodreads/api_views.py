@@ -10,8 +10,8 @@ from rest_framework.pagination import PageNumberPagination
 
 # models and serializers
 from .models import GoodreadsAccount
-from .serializers import GoodreadsAccountSerializer 
-from .mixins import OptionalAuthMixin
+from .serializers import GoodreadsAccountSerializer
+from planetarium_api.mixins import OptionalAuthMixin
 from .serializers import BookSerializer
 from rest_framework.decorators import action
 # path action
@@ -46,7 +46,7 @@ class GoodreadsViewSet(OptionalAuthMixin, ModelViewSet):
         goodreads_account = GoodreadsAccount.objects.get(user__username=user_username)
 
         # Get friends' books
-        friends = goodreads_account.friends.all()
+        friends = goodreads_account.friends.prefetch_related('user_books').all()  # fixing N+1 query problem after check theory
         friends_books = set()
         for friend in friends:
             friends_books.update(friend.user_books.all())

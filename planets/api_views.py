@@ -10,7 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 # models and serializers
 from .models import Planet
 from .serializers import PlanetSerializer, CustomTokenObtainPairSerializer
-from .mixins import OptionalAuthMixin
+from planetarium_api.mixins import OptionalAuthMixin
 from rest_framework_simplejwt.views import TokenObtainPairView
 # cache
 from django.core.cache import cache

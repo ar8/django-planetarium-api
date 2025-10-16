@@ -7,7 +7,7 @@ class OptionalAuthMixin:
     Mixin to set permissions dynamically based on settings only for testing purposes.
     """
     def get_permissions(self):
-        auth_required = getattr(settings, 'PLANETS_AUTH_REQUIRED', False)
+        auth_required = getattr(settings, 'API_AUTH_REQUIRED', False)
         if auth_required:
             permission_classes = [IsAuthenticated]
         else:
