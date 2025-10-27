@@ -55,3 +55,6 @@ class Friend(models.Model):
         verbose_name = 'Friend'
         verbose_name_plural = 'Friends'
         db_table = 'friends_relationships'
+books = Book.objects.all()  # 1 query for all books
+for book in books:
+    print(book.author.name)  # 1 query per book → N queries
